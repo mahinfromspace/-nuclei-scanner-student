@@ -3,7 +3,7 @@ id: basic-http-check
 info:
   name: Website Responded - Demo Security Check
   author: student
-  severity: medium
+  severity: info
   description: The target website responded. This is a demo check for the cloud scanner.
 
 http:
