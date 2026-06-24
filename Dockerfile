@@ -1,17 +1,22 @@
-# Use a slim Python image
-FROM python:3.11-slim
+FROM projectdiscovery/nuclei:latest
 
-# Install Nuclei (via Go) or download the binary
-# A cleaner way is using the official binary release
-RUN apt-get update && apt-get install -y wget unzip \
-    && wget https://github.com/projectdiscovery/nuclei/releases/latest/download/nuclei_linux_amd64.zip \
-    && unzip nuclei_linux_amd64.zip -d /usr/local/bin/
+RUN apk add --no-cache python3 py3-pip
 
-# Set up your app
 WORKDIR /app
-COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+
 COPY . .
 
+RUN python3 -m venv /app/venv
+RUN /app/venv/bin/pip install --upgrade pip
+RUN /app/venv/bin/pip install -r requirements.txt
+
+RUN mkdir -p /app/results
+
+# Download/update Nuclei templates during build
+RUN nuclei -ut || true
+
 EXPOSE 10000
-CMD ["gunicorn", "app:app", "--bind", "0.0.0.0:10000"]
+
+ENTRYPOINT []
+
+CMD /app/venv/bin/gunicorn app:app --bind 0.0.0.0:${PORT:-10000} --workers 1 --timeout 360
