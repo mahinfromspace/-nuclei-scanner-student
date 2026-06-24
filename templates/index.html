@@ -1,63 +1,37 @@
 <!DOCTYPE html>
 <html>
-<head>
-    <title>Nuclei Security Scanner</title>
-</head>
 <body>
-    <h1>Nuclei Security Scanner</h1>
 
-    <form action="/scan" method="post">
-        <input name="target" placeholder="https://example.com" required>
-        <button type="submit">Scan</button>
-    </form>
+<h1>Nuclei Security Scanner</h1>
 
-    {% if findings is defined %}
-        <h2>Scan Results</h2>
-        <p><b>Target:</b> {{ target }}</p>
-        <p><b>Output file:</b> {{ filename }}</p>
-        <p><a href="/download/{{ filename }}">Download JSONL Report</a></p>
+<form action="/scan" method="post">
+    <input name="target" placeholder="https://example.com" required>
+    <button type="submit">Scan</button>
+</form>
 
-        {% if findings %}
-            <table border="1" cellpadding="6">
-                <tr>
-                    <th>Severity</th>
-                    <th>Vulnerability</th>
-                    <th>URL</th>
-                    <th>Description</th>
-                </tr>
+{% if target %}
+    <h2>Results for {{ target }}</h2>
 
-                {% for f in findings %}
-                <tr>
-                    <td>{{ f.get("info", {}).get("severity", "unknown") }}</td>
-                    <td>{{ f.get("info", {}).get("name", f.get("template-id", "unknown")) }}</td>
-                    <td>{{ f.get("matched-at", f.get("host", "")) }}</td>
-                    <td>{{ f.get("info", {}).get("description", "") }}</td>
-                </tr>
-                {% endfor %}
-            </table>
-        {% else %}
-            <p>No findings found.</p>
-        {% endif %}
-    {% endif %}
-
-    {% if history %}
-        <h2>Scan History</h2>
-
-        <table border="1" cellpadding="6">
+    {% if findings %}
+        <table border="1">
             <tr>
-                <th>File</th>
-                <th>Findings</th>
-                <th>Download</th>
+                <th>Severity</th>
+                <th>Name</th>
+                <th>URL</th>
             </tr>
 
-            {% for h in history %}
+            {% for f in findings %}
             <tr>
-                <td>{{ h.filename }}</td>
-                <td>{{ h.count }}</td>
-                <td><a href="/download/{{ h.filename }}">Download</a></td>
+                <td>{{ f.get("info", {}).get("severity", "") }}</td>
+                <td>{{ f.get("info", {}).get("name", "") }}</td>
+                <td>{{ f.get("matched-at", "") }}</td>
             </tr>
             {% endfor %}
         </table>
+    {% else %}
+        <p>No critical or high findings found.</p>
     {% endif %}
+{% endif %}
+
 </body>
 </html>
