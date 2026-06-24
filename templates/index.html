@@ -21,9 +21,8 @@
         <table border="1" cellpadding="6">
             <tr>
                 <th>Severity</th>
-                <th>Template ID</th>
-                <th>Check Name</th>
-                <th>Finding / Extracted Info</th>
+                <th>Template</th>
+                <th>Missing Header</th>
                 <th>URL</th>
                 <th>Description</th>
             </tr>
@@ -31,31 +30,15 @@
             {% for f in findings %}
             <tr>
                 <td>{{ f.get("info", {}).get("severity", "") }}</td>
-
-                <td>{{ f.get("template-id", "") }}</td>
-
                 <td>{{ f.get("info", {}).get("name", "") }}</td>
-
-                <td>
-                    {% if f.get("matcher-name") %}
-                        {{ f.get("matcher-name") }}
-                    {% elif f.get("extractor-name") %}
-                        {{ f.get("extractor-name") }}
-                    {% elif f.get("extracted-results") %}
-                        {{ f.get("extracted-results") | join(", ") }}
-                    {% else %}
-                        -
-                    {% endif %}
-                </td>
-
-                <td>{{ f.get("matched-at", f.get("host", "")) }}</td>
-
+                <td>{{ f.get("matcher-name", "") }}</td>
+                <td>{{ f.get("matched-at", "") }}</td>
                 <td>{{ f.get("info", {}).get("description", "") }}</td>
             </tr>
             {% endfor %}
         </table>
     {% else %}
-        <p>No findings found.</p>
+        <p>No missing security headers found.</p>
     {% endif %}
 
     {% if stderr %}
