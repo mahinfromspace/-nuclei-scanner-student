@@ -1,10 +1,10 @@
 id: basic-http-check
 
 info:
-  name: Basic HTTP Response Check
+  name: Website Is Reachable
   author: student
   severity: info
-  description: Checks if the website responds.
+  description: The target website responded to an HTTP request.
 
 http:
   - method: GET
@@ -12,9 +12,6 @@ http:
       - "{{BaseURL}}"
 
     matchers:
-      - type: status
-        status:
-          - 200
-          - 301
-          - 302
-          - 403
+      - type: dsl
+        dsl:
+          - "status_code >= 100 && status_code < 600"
