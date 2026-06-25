@@ -12,11 +12,8 @@ RUN /app/venv/bin/pip install -r requirements.txt
 
 RUN mkdir -p /app/results
 
-# Download/update Nuclei templates during build
-RUN nuclei -update-templates -update-template-dir /root/nuclei-templates
+RUN test -f /app/nuclei-templates/http-missing-security-headers.yaml
 
-# Check that the exact template used in app.py exists
-RUN test -f /root/nuclei-templates/http/misconfiguration/http-missing-security-headers.yaml
 EXPOSE 10000
 
 ENTRYPOINT []

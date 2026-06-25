@@ -1,0 +1,65 @@
+id: http-missing-security-headers
+
+info:
+  name: HTTP Missing Security Headers
+  author: student
+  severity: info
+  description: This template searches for missing HTTP security headers. The impact of these missing headers can vary.
+
+http:
+  - method: GET
+    path:
+      - "{{BaseURL}}"
+
+    stop-at-first-match: false
+    matchers-condition: or
+    matchers:
+      - type: dsl
+        name: strict-transport-security
+        dsl:
+          - "!contains(tolower(all_headers), 'strict-transport-security')"
+
+      - type: dsl
+        name: content-security-policy
+        dsl:
+          - "!contains(tolower(all_headers), 'content-security-policy')"
+
+      - type: dsl
+        name: permissions-policy
+        dsl:
+          - "!contains(tolower(all_headers), 'permissions-policy')"
+
+      - type: dsl
+        name: x-frame-options
+        dsl:
+          - "!contains(tolower(all_headers), 'x-frame-options')"
+
+      - type: dsl
+        name: x-permitted-cross-domain-policies
+        dsl:
+          - "!contains(tolower(all_headers), 'x-permitted-cross-domain-policies')"
+
+      - type: dsl
+        name: referrer-policy
+        dsl:
+          - "!contains(tolower(all_headers), 'referrer-policy')"
+
+      - type: dsl
+        name: x-content-type-options
+        dsl:
+          - "!contains(tolower(all_headers), 'x-content-type-options')"
+
+      - type: dsl
+        name: cross-origin-embedder-policy
+        dsl:
+          - "!contains(tolower(all_headers), 'cross-origin-embedder-policy')"
+
+      - type: dsl
+        name: cross-origin-opener-policy
+        dsl:
+          - "!contains(tolower(all_headers), 'cross-origin-opener-policy')"
+
+      - type: dsl
+        name: cross-origin-resource-policy
+        dsl:
+          - "!contains(tolower(all_headers), 'cross-origin-resource-policy')"
